@@ -7,6 +7,7 @@ import com.chak.Project.digital_banking_system.repository.AccountRepository;
 import com.chak.Project.digital_banking_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,6 +30,7 @@ public class AccountService {
         return account;
     }
 
+    @Transactional
     public String transerAmount(TransferRequest request) {
 
         Account fromAccount = accountRepository.findById(request.getFromAcoountId()).orElseThrow(() ->new RuntimeException("No Account Find"));
