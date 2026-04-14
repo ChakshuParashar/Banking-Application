@@ -10,6 +10,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Double balance;
     private String accountNumber;
     private Double amount;
     private LocalDateTime createdAt;

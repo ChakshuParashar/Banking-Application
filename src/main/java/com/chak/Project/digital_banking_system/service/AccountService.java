@@ -1,5 +1,6 @@
 package com.chak.Project.digital_banking_system.service;
 
+import com.chak.Project.digital_banking_system.dto.TransferRequest;
 import com.chak.Project.digital_banking_system.entity.Account;
 import com.chak.Project.digital_banking_system.entity.User;
 import com.chak.Project.digital_banking_system.repository.AccountRepository;
@@ -26,5 +27,22 @@ public class AccountService {
         account.setCreatedAt(LocalDateTime.now());
         accountRepository.save(account);
         return account;
+    }
+
+    public String transerAmount(TransferRequest request) {
+
+        Account fromAccount = accountRepository.findById(request.getFromAcoountId()).orElseThrow(() ->new RuntimeException("No Account Find"));
+        Account toAccount = accountRepository.findById(request.getToAccountId()).orElseThrow(() ->new RuntimeException("No Account Find"));
+        if(request.getAmount() > fromAccount.getAmount())
+        {
+           throw  new RuntimeException("Fund Not Available");
+        }
+        // setting remaining ammount
+        fromAccount.setBalance(fromAccount.getBalance()- request.getAmount());
+        // add to Account
+        toAccount.setBalance(toAccount.getBalance()+ request.getAmount());
+        accountRepository.save(fromAccount);
+        accountRepository.save(toAccount);
+        return "Transer Successful";
     }
 }
