@@ -5,6 +5,8 @@ import com.chak.Project.digital_banking_system.entity.Account;
 import com.chak.Project.digital_banking_system.entity.User;
 import com.chak.Project.digital_banking_system.repository.AccountRepository;
 import com.chak.Project.digital_banking_system.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +14,10 @@ import com.chak.Project.digital_banking_system.dto.APIResponse;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
 @Service
 public class AccountService {
+    private  static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
     @Autowired
     UserRepository userRepository;
@@ -32,7 +36,7 @@ public class AccountService {
 
     @Transactional
     public APIResponse<String> transerAmount(TransferRequest request) {
-
+        logger.info("Checkni");
         Account fromAccount = accountRepository.findById(request.getFromAccountId()).orElseThrow(() ->new RuntimeException("No Account Find"));
         Account toAccount = accountRepository.findById(request.getToAccountId()).orElseThrow(() ->new RuntimeException("No Account Find"));
         if(request.getAmount() > fromAccount.getBalance())
