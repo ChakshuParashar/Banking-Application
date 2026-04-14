@@ -8,7 +8,7 @@ import com.chak.Project.digital_banking_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.chak.Project.digital_banking_system.dto.APIResponse;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -31,20 +31,20 @@ public class AccountService {
     }
 
     @Transactional
-    public String transerAmount(TransferRequest request) {
+    public APIResponse<String> transerAmount(TransferRequest request) {
 
-        Account fromAccount = accountRepository.findById(request.getFromAcoountId()).orElseThrow(() ->new RuntimeException("No Account Find"));
+        Account fromAccount = accountRepository.findById(request.getFromAccountId()).orElseThrow(() ->new RuntimeException("No Account Find"));
         Account toAccount = accountRepository.findById(request.getToAccountId()).orElseThrow(() ->new RuntimeException("No Account Find"));
-        if(request.getAmount() > fromAccount.getAmount())
+        if(request.getAmount() > fromAccount.getBalance())
         {
            throw  new RuntimeException("Fund Not Available");
         }
         // setting remaining ammount
-        fromAccount.setBalance(fromAccount.getBalance()- request.getAmount());
+        fromAccount.setBalance(fromAccount.getBalance() - request.getAmount());
         // add to Account
-        toAccount.setBalance(toAccount.getBalance()+ request.getAmount());
+        toAccount.setBalance(toAccount.getBalance() + request.getAmount());
         accountRepository.save(fromAccount);
         accountRepository.save(toAccount);
-        return "Transer Successful";
+        return new APIResponse<String>("SUCCESS", "Transfer successful", null);
     }
 }
