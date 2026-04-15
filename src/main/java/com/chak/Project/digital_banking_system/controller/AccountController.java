@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.chak.Project.digital_banking_system.dto.APIResponse;
 @RestController
 public class AccountController {
-    
+
     @Autowired
     AccountService accountService;
 
