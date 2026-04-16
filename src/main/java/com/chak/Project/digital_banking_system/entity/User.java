@@ -15,6 +15,9 @@ public class User {
     private Integer  age;
     private String address;
     private Long mobileNumber;
+    @JsonIgnore
+    private String password;
+    private String email;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")

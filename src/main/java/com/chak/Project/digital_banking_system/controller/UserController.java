@@ -1,5 +1,6 @@
 package com.chak.Project.digital_banking_system.controller;
 
+import com.chak.Project.digital_banking_system.dto.RegisterUser;
 import com.chak.Project.digital_banking_system.entity.User;
 import com.chak.Project.digital_banking_system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,11 @@ public class UserController {
     public User adduser(@RequestBody User user)
     {
        return userService.addUser(user);
+    }
+
+    @PostMapping("/register")
+    public User register(@RequestBody RegisterUser registerUser)
+    {
+        return userService.registerUser(registerUser);
     }
 }
