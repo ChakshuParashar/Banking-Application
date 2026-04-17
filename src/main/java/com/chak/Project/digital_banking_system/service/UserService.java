@@ -1,6 +1,8 @@
 package com.chak.Project.digital_banking_system.service;
 
+import com.chak.Project.digital_banking_system.configuration.JWTUtil;
 import com.chak.Project.digital_banking_system.configuration.SecurityConfig;
+import com.chak.Project.digital_banking_system.dto.Login;
 import com.chak.Project.digital_banking_system.dto.RegisterUser;
 import com.chak.Project.digital_banking_system.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    JWTUtil jwtUtil;
 
     public List<User> getAllUser() {
        return userRepository.findAll();
@@ -35,4 +39,13 @@ public class UserService {
       return userRepository.save(user);
     }
 
+    public String login(Login login) {
+        User user = userRepository.findByEmail(login.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if(!passwordEncoder.matches(login.getPassword(),user.getPassword())){
+            throw  new RuntimeException("No User Found");
+        }
+
+        return jwtUtil.generateToken(login.getEmail());
+    }
 }

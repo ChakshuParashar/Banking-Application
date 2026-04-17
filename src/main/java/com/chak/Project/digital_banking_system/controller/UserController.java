@@ -1,5 +1,7 @@
 package com.chak.Project.digital_banking_system.controller;
 
+import com.chak.Project.digital_banking_system.dto.APIResponse;
+import com.chak.Project.digital_banking_system.dto.Login;
 import com.chak.Project.digital_banking_system.dto.RegisterUser;
 import com.chak.Project.digital_banking_system.entity.User;
 import com.chak.Project.digital_banking_system.service.UserService;
@@ -33,5 +35,12 @@ public class UserController {
     public User register(@RequestBody RegisterUser registerUser)
     {
         return userService.registerUser(registerUser);
+    }
+
+    @PostMapping("/login")
+    public APIResponse<String> loginuser(@RequestBody Login login )
+    {
+     String token =  userService.login(login);
+        return new APIResponse<>("SUCCESS", "Login successful", token);
     }
 }
