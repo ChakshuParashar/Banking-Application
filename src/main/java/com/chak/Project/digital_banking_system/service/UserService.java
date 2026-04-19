@@ -5,6 +5,7 @@ import com.chak.Project.digital_banking_system.configuration.SecurityConfig;
 import com.chak.Project.digital_banking_system.dto.Login;
 import com.chak.Project.digital_banking_system.dto.RegisterUser;
 import com.chak.Project.digital_banking_system.entity.User;
+import com.chak.Project.digital_banking_system.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,17 +36,18 @@ public class UserService {
         User user = new User();
         user.setUserName(registerUser.getName());
         user.setEmail(registerUser.getEmail());
+        user.setRole("USER");
         user.setPassword(passwordEncoder.encode(registerUser.getPassword()));
       return userRepository.save(user);
     }
 
     public String login(Login login) {
         User user = userRepository.findByEmail(login.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         if(!passwordEncoder.matches(login.getPassword(),user.getPassword())){
             throw  new RuntimeException("No User Found");
         }
 
-        return jwtUtil.generateToken(login.getEmail());
+        return jwtUtil.generateToken(user.getEmail(),user.getRole());
     }
 }

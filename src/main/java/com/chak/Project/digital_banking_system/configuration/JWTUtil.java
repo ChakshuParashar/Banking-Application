@@ -10,13 +10,18 @@ import java.util.Date;
 public class JWTUtil {
 
 private final String SECRET = "OpenApIKapurrabakosalaviamirtadijaanpebanekalatilmukhdetejachdajaanbadejadohasdenajarrakiyo";
-    public String generateToken(String email)
+    public String generateToken(String email,String role)
     {
-        return Jwts.builder().setSubject(email).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)).signWith(SignatureAlgorithm.HS256, SECRET).compact();
+        return Jwts.builder().setSubject(email).claim("role",role).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)).signWith(SignatureAlgorithm.HS256, SECRET).compact();
     }
 
     public String extractEmail(String token) {
        return  Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String extractRole(String token)
+    {
+        return  Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody().get("role", String.class);
     }
 }
 

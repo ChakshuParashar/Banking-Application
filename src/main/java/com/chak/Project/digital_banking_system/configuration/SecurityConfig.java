@@ -21,7 +21,10 @@ public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Except
                    "/register",
                    "/swagger-ui/**",
                    "/swagger-ui.html",
-                   "/v3/api-docs/**").permitAll().anyRequest().authenticated())
+                   "/v3/api-docs/**").permitAll()
+                   .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                   .requestMatchers("/user/**").hasAuthority("USER")
+                   .anyRequest().authenticated())
            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
    return http.build();
 }

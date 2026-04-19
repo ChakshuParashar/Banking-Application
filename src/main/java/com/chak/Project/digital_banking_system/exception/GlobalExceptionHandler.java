@@ -28,11 +28,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleRuntime(RuntimeException ex) {
+    public ResponseEntity<APIResponse<Map<String, String>>> handleRuntime(RuntimeException ex) {
 
         Map<String, String> error = new HashMap<>();
         error.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        APIResponse<Map<String,String>> response =
+                new APIResponse<>("FAILED", ex.getMessage(), error);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<APIResponse<String>> handleUserException(UserNotFoundException ex)
+    {
+        APIResponse<String> response = new APIResponse<>("FAILED", ex.getMessage(), null);
+        return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+    }
+
 }
